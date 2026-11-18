@@ -1,0 +1,45 @@
+# MPLAB X Build and Output Directories
+build/
+dist/
+debug/
+disassembly/
+.generated_files/
+queuelogs/
+
+# MPLAB X Project & NetBeans Specific Files
+nbproject/private/
+nbproject/Makefile-*
+nbproject/Package-*
+nbbuild/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Compiled Object, Debug, and Binary Files
+*.o
+*.obj
+*.obj.dmp
+*.elf
+*.hex
+*.cof
+*.map
+*.sym
+*.lst
+*.d
+*.p1
+*.pre
+*.sdb
+*.rlf
+*.hxl
+*.as
+funclist
+
+# Temporary and Backup Files
+*~
+~*.*
+*.bak
+*.tmp
+# Additional MPLAB & VS Code Files
+nbproject/Makefile-genesis.properties
+*.cmf
+.vscode/
