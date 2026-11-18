@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/digital_keypad.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/external_eeprom.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/digital_keypad.h</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/i2c.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/external_eeprom.h</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/cbb.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/ds1307.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/clcd.h</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/clcd.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/i2c.h</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/isr.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/adc.h</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/cbb.h</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/adc.c</file>
+            <file>file:/C:/Users/asfaq/MPLABXProjects/CarBlackBox.X/main.c</file>
+        </group>
+    </open-files>
+</project-private>
