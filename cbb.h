@@ -55,7 +55,8 @@ void display_dashboard();
 void update_car_event();
 void get_password_from_user();
 void log_car_event();
-AuthStatus check_password(unsigned char key);
+CarScreens get_password(unsigned char key);
+AuthStatus check_password(unsigned char *pass);
 void display_main_menu();
 
 #endif	/* CBB_H */

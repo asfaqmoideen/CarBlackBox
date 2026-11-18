@@ -15,13 +15,19 @@
 #include "external_eeprom.h"
 #include "i2c.h"
 #include "string.h"
+#include "timers.h"
+#define PASSWORD_OFFSET 6
 
 unsigned char time[7]; //HHMMSS
 extern CarEvent myCar;
 unsigned char log[11];
-unsigned char pos = 0;
-unsigned char count = 0;
+unsigned char log_pos = 0;
+unsigned char pass_char_count = 0;
 unsigned char user_password[5] = {0};
+unsigned char attempts_remaining = 3;
+extern volatile unsigned char sec, return_time;
+
+
 
 static void get_time()
 {
@@ -92,51 +98,95 @@ void log_car_event()
     
     eeprom_write_string(address, log);
 
-    pos++;
+    log_pos++;
 
-    if(pos == 10)
+    if(log_pos == 10)
     {
-        pos = 0;
+        log_pos = 0;
     }
     
    
 }
 
-AuthStatus check_password(unsigned char key)
-{   
-    
-    key = ALL_RELEASED;
-    
-    if(count < 4)
+CarScreens get_password(unsigned char key)
+{
+    return_time = 5;
+    if (key == SW4 || key == SW5)
     {   
-        clcd_putch('*', LINE2(count));
-        if(key == SW4)
-        {
-            user_password[count++] = '0';
-        }
-        if(key == SW5)
-        {
-            user_password[count++] = '1';
-        }
+
+        user_password[pass_char_count] = (key == SW4) ? '0' : '1';
+        clcd_putch('*', LINE2(pass_char_count + PASSWORD_OFFSET));
+        pass_char_count++;
     }
-    
-    if(count == 4)
-    {
-        if(strcmp(set_password, user_password) == 0)
-        {
-            return success;
+
+    if(return_time == 0)
+    {   
+        clear_display();
+        return Dashboard;
+    }
+
+    if (pass_char_count == 4) 
+    {   
+        
+        clear_display();
+        clcd_write(DISP_ON_AND_CURSOR_OFF, INST_MODE);
+        user_password[4] = '\0';
+        pass_char_count = 0;
+        if (check_password(user_password) == success)
+        {  
+            clcd_print("Login Success !", LINE2(2));
+            __delay_ms(4000);
+            clear_display();
+            return MainMenu;
         }
+
+        if (--attempts_remaining == 0)
+        {
+            clear_display();
+            clcd_print("You are blocked.", LINE1(0));
+            sec = 20; 
+            clcd_print("s remaining ", LINE2(2));
+            while (sec)
+            {
+                    clcd_putch('0' + sec / 10, LINE2(0));
+                    clcd_putch('0' + sec % 10, LINE2(1));
+            }
+
+            attempts_remaining = 3;
+            get_password_from_user();
+            return LoginScreen;
+        }
+        else
+        {   
+            clear_display();
+            clcd_print("Wrong Password", LINE1(0));
+            clcd_putch(attempts_remaining + '0', LINE2(0));
+            clcd_print("attempts left.", LINE2(3));
+            __delay_ms(2000);
+            get_password_from_user();
+            return LoginScreen;
+        }
+
+        
+    }
+    return LoginScreen;
+}
+
+AuthStatus check_password(unsigned char *user_password)
+{
+    if(strcmp(set_password, user_password) == 0)
+    {
+        return success;
     }
     else
     {
         return failure;
     }
-    
 }
+
 
 void display_main_menu()
 {
-    clear_display();
     clcd_print("Main Menu", LINE1(0));
 }
 

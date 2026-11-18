@@ -14,7 +14,8 @@
 #include "ds1307.h"
 #include "external_eeprom.h"
 #include "i2c.h"
-#include "cbb.h"    
+#include "cbb.h"
+#include "timers.h"  
 
 #pragma config WDTE = OFF
 
@@ -25,6 +26,8 @@ CarEvent myCar = {
     .gear_pos = 0
 };
 
+
+
 static void init_config(void) 
 {
     init_clcd();
@@ -32,7 +35,8 @@ static void init_config(void)
     init_i2c(I2CFREQUENCY);
     init_adc();
     init_ds1307();
-    
+    init_timer0();
+    GIE =   1 ;
 }
 
 void main(void) 
@@ -85,33 +89,26 @@ void main(void)
             
             log_car_event();
         }
+        
         else if((key == SW4 || key == SW5) && screen_flag == Dashboard )
         {
              screen_flag = LoginScreen;
-             clear_display();
-
-            //display enter password
-            clcd_print("ENTER PASSWORD", LINE1(0));
-            clcd_print("    ", LINE2(4)); // move cursor to next line
-            //turn on the cursor
-//            clcd_write(DISP_ON_AND_CURSOR_ON, INST_MODE);
-            
+             get_password_from_user();            
+             key = ALL_RELEASED;
         }
         
         switch(screen_flag)
         {
             case Dashboard:
-                display_dashboard();
+                display_dashboard();    
                 break;   
             case LoginScreen:
-                if(check_password(key) == success)
-                {
-                    screen_flag = MainMenu;
-                    break;
-                }
+                screen_flag = get_password(key);
                 break;
             case MainMenu:
                 display_main_menu();
+                break;
+
         }
     }
     return;
