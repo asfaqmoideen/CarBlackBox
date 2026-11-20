@@ -110,19 +110,21 @@ void log_car_event()
 
 CarScreens get_password(unsigned char key)
 {
-    return_time = 5;
+
     if (key == SW4 || key == SW5)
     {   
-
+        return_time = 5; 
         user_password[pass_char_count] = (key == SW4) ? '0' : '1';
         clcd_putch('*', LINE2(pass_char_count + PASSWORD_OFFSET));
         pass_char_count++;
     }
 
-    if(return_time == 0)
-    {   
+    if (return_time == 0)
+    {
+        pass_char_count = 0;           
         clear_display();
-        return Dashboard;
+        clcd_write(DISP_ON_AND_CURSOR_OFF, INST_MODE);
+        return DashboardScreen;
     }
 
     if (pass_char_count == 4) 
@@ -132,12 +134,12 @@ CarScreens get_password(unsigned char key)
         clcd_write(DISP_ON_AND_CURSOR_OFF, INST_MODE);
         user_password[4] = '\0';
         pass_char_count = 0;
-        if (check_password(user_password) == success)
+        if (strcmp(set_password, user_password) ==0)
         {  
             clcd_print("Login Success !", LINE2(2));
             __delay_ms(4000);
             clear_display();
-            return MainMenu;
+            return MainMenuScreen;
         }
 
         if (--attempts_remaining == 0)
@@ -172,22 +174,16 @@ CarScreens get_password(unsigned char key)
     return LoginScreen;
 }
 
-AuthStatus check_password(unsigned char *user_password)
-{
-    if(strcmp(set_password, user_password) == 0)
-    {
-        return success;
-    }
-    else
-    {
-        return failure;
-    }
-}
 
 
 void display_main_menu()
-{
-    clcd_print("Main Menu", LINE1(0));
+{   
+
+    clcd_putch(RIGHT_ARROW, LINE1(0));
+    
+    clcd_print(main_menu[menu_pos], LINE1(1));
+    clcd_print(main_menu[menu_pos+1], LINE2(1));
+    
 }
 
 
@@ -206,4 +202,12 @@ void get_password_from_user()
     //start timer
 
     //blink the cursor 
+}
+
+
+void display_logs()
+{
+    clear_display();
+
+    
 }

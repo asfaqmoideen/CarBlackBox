@@ -32,6 +32,8 @@
 #define CLEAR_DISP_SCREEN           0x01
 #define DISP_ON_AND_CURSOR_OFF      0x0C
 #define DISP_ON_AND_CURSOR_ON       0x0F
+#define RIGHT_ARROW                 0x7E
+
 
 void init_clcd(void);
 void clcd_putch(const char data, unsigned char addr);

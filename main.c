@@ -26,7 +26,8 @@ CarEvent myCar = {
     .gear_pos = 0
 };
 
-
+extern volatile unsigned char return_time;
+extern unsigned char menu_pos;
 
 static void init_config(void) 
 {
@@ -44,7 +45,7 @@ void main(void)
     
     unsigned char key = ALL_RELEASED;
     
-    CarScreens screen_flag = Dashboard;
+    CarScreens screen_flag = DashboardScreen;
    
     
     init_config();
@@ -71,7 +72,7 @@ void main(void)
         }
         else if(key == SW2)
         {
-            //decrement the gear
+            //decrement the gear 
               if (myCar.gear_pos > 0) 
                   myCar.gear_pos--;
             
@@ -90,25 +91,65 @@ void main(void)
             log_car_event();
         }
         
-        else if((key == SW4 || key == SW5) && screen_flag == Dashboard )
+        else if((key == SW4 || key == SW5) && screen_flag == DashboardScreen )
         {
              screen_flag = LoginScreen;
+             return_time = 5; 
              get_password_from_user();            
              key = ALL_RELEASED;
         }
         
+        else if((key == SW4 || key == SW5 || key == SW6) && screen_flag == MainMenuScreen )
+        {   
+             clear_display();
+             if(key == SW4)
+             {
+                if(menu_pos > 0)
+                    menu_pos--;
+             }
+             else if(key == SW5)
+             {
+                if(menu_pos < 4)
+                    menu_pos++;
+             }
+
+             else
+             {
+                  if(menu_pos == 0 || menu_pos == 3 || menu_pos == 4)
+                  {
+                        screen_flag = main_menu[menu_pos];
+                  }
+                  else if(menu_pos == 1)
+                  {
+                        // clear log
+                  }
+                  else if(menu_pos == 2)
+                  {
+                       // download log
+                  }
+             }
+        }
+
         switch(screen_flag)
         {
-            case Dashboard:
+            case DashboardScreen:
                 display_dashboard();    
                 break;   
             case LoginScreen:
                 screen_flag = get_password(key);
                 break;
-            case MainMenu:
+            case MainMenuScreen:
                 display_main_menu();
                 break;
-
+            case ViewLogScreen:
+                display_logs();
+                break;
+            case SetTimeScreen:
+                change_rtc_time();
+                break;
+            case ChangPasswordScreen:
+                change_password();
+                break;
         }
     }
     return;
